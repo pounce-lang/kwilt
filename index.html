@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>7rectangles - a simple experiment in random art</title>
+  <script src="pounce/js/dist/runtime.js"></script>
+  <script src="pounce/js/modules/str-module.js"></script>
+  <script src="pounce/js/modules/list_module.js"></script>
+  <script src="pounce/js/modules/rec_module.js"></script>
+  <script src="pounce/js/modules/publish_module.js"></script>
+  <script src="pounce/js/modules/canvas_basic_module.js"></script>
+
+  <script src="pounce/js/modules/subscription_module.js"></script>
+  <script src="pounce/js/dist/chroma.min.js"></script>
+  <script src="pounce/js/modules/chroma_module.js"></script>
+
+  <script src="pounce/js/parser/Pounce_ast.js"></script>
+  <script src="pounce/js/parser/Pounce_ast_actions.js"></script>
+
+  <style>
+    body {
+      padding: 12px;
+      font: 1em Helvetica Neue, Helvetica, Arial, sans-serif;
+      background-color: #dddddd;
+    }
+
+    .main-page {
+      max-width: 978px;
+    }
+
+    @media screen and (min-width: 1110px) {
+      .main-page {
+        padding-left: 90px;
+        padding-right: 90px;
+      }
+    }
+
+
+    .col-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .row-container {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .title {
+      background-color: rgba(76, 76, 76, .3);
+      margin-block-start: 2px;
+      margin: 5px;
+      padding: 10px;
+      min-width: 160px;
+    }
+
+    .maine-canvas {
+      margin: 5px 15px 0 10px;
+    }
+
+    button {
+      padding: 10px;
+      margin: 3px;
+    }
+
+    .up-vote {
+      border: none;
+      background-color: rgba(76, 76, 76, .3);
+    }
+
+    .dn-vote {
+      border: none;
+      background-color: rgba(76, 76, 76, .3);
+    }
+
+    .next-please {
+      border: none;
+      background-color: rgba(76, 76, 76, .3);
+    }
+
+    .prev-please {
+      border: none;
+      background-color: rgba(76, 76, 76, .3);
+    }
+
+    .grid-of-3 {
+      display: grid;
+      grid-template-columns: 108px;
+      grid-template-rows: 108px 108px 108px;
+      grid-gap: 5px;
+    }
+
+    .grid-1 {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .grid-2 {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .grid-3 {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    .score-board {
+      text-align: center;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="col-container main-page">
+
+    <div class="row-container">
+      <div class="title">
+        <h2>7rectangles</h2>
+        <div id="view-number"></div>
+        <p id="instructions"></p>
+      </div>
+      <div class="maine-canvas">
+        <!-- style="width: 540px; height: 324px" -->
+        <canvas width="250" height="150" style="width: 540px; height: 324px" id="maine"></canvas>
+      </div>
+      <div class="col-container grid-of-3">
+        <h2 class="score-board grid-1">your rating: <span id="up-vote-score"></span></h2>
+        <button class="prev-please grid-2" id="prevBtn">prev</button>
+        <h2 class="score-board grid-3" id="dn-vote-score"></h2>
+      </div>
+      <div class="col-container grid-of-3">
+        <button class="up-vote grid-1" id="plusOneBtn">a keeper</button>
+        <button class="next-please grid-2" id="nextBtn">next</button>
+        <button class="dn-vote grid-3" id="minusOneBtn">not so good</button>
+      </div>
+
+    </div>
+    <div class="row-container">
+      <button id="aboutBtn" style="width: 200px">a little about</button>
+      <!-- <button id="galleryBtn" style="width: 200px">make a gallery</button>
+      <button id="howtoBtn" style="width: 200px">save share and help</button> -->
+      <button id="feedbackBtn" style="width: 200px">share your feedback</button>
+    </div>
+
+    <div id="about-section" style="display: none;">
+      <h3>About 7rectangles</h3>
+      <p>The graphics are randomly generated, made by layering 7 rectangles of random size, color and transparency on
+        either a white or
+        black background (also randomly selected).
+        It is your task to rate them according to how much they appeal to you.
+        You will see (up to) 100 of these randomly generated compositions, and you can move to the next or previous one
+        to see them again and perhaps adjust your rating.
+      </p>
+      <p>Being random, it is interesting that any of these images appeal to us.
+        Many or most are duds, for sure, but there are a few that
+        surprise us and appeal to our sense of color or composition or balance.
+        We <em>can</em> find some order and harmony in an random arrangement of
+        rectangles, or we may like an off-kilter composition that speaks to us.
+        It also shows us that what we would not have
+        arranged our selves. It presents us something new, opening us to new aesthetic possibilities.</p>
+      <p>
+        In the near future, you will see thumbnail images of your top rated compositions and you'll be able to
+        publish galleries of these minor masterpieces. --Thanks for trying it out, we hope you've had some fun.
+      </p>
+    </div>
+
+    <div id="feedback-section" style="display: none;">
+      <h3>If you have Feedback</h3>
+      <p>Since this is a 'just for fun' experiment,
+        It is a rough draft to say the least. Looking forward,
+        there are ideas for improvements floating around.
+        If you want to share any comments that might be helpful,
+        please send them in -- and thanks. </p>
+      <form name="7rectangles-feedback" method="POST" data-netlify="true">
+        <p>
+          <label>Your Role in this: <select name="role[]" multiple>
+              <option value="artist">Artist</option>
+              <option value="teacher">Teacher</option>
+              <option value="critic">Art Critic</option>
+              <option value="knows">I know what I like</option>
+              <option value="observer">Keen Observer</option>
+            </select></label>
+        </p>
+        <p>
+          <label>Feedback: <textarea name="message" style="width: 760px; height: 72px;"></textarea></label>
+        </p>
+        <p> If you would like a reply or just want to hear more about updates, please include
+          <label>your name: <input type="text" name="name" /></label>
+        </p>
+        <p>
+          <label>Oh and your email: <input type="email" name="email" /></label>
+        </p>
+        <p>We'll only send as few
+          <label>emails as you want: <select name="notify[]">
+              <option value="onceAQuarter">Ok, to send a single responce</option>
+              <option value="onceAQuarter">Ok, to send updates once a quarter</option>
+              <option value="No">No thank you</option>
+            </select></label>
+        </p>
+        <p>
+          <button type="submit">Send</button>
+        </p>
+      </form>
+    </div>
+  </div>
+  <script src="7rr.js"></script>
+</body>
+
+</html>
