@@ -38,8 +38,9 @@ uncons [drop] dip
 [{r:0 g:0 b:0} swap 8 / a set {x:0 w:180 h:10} swap color set gy y set cb-box] [layerit] def
 [layerit gy 10 + [] cons [gy] def] map drop
 
+[0.25] [mix-percent] def
 [ x get 10 - 20 / 1 round 20 * x set y get 10 - 20 / 1 round 20 * y set 
-    {w:20 h:20} swap merge picked-color 0.3 a set color set palette cb-box-ctx
+    {w:20 h:20} swap merge picked-color mix-percent a set color set palette cb-box-ctx
 ] [mix-block] def
 
 [ x get 180 > mixPaletteMode and
@@ -47,6 +48,8 @@ uncons [drop] dip
     [palette cb-color-at [] cons [picked-color] def]
   ifte
 ] [mousedown] palette subscribe 
+
+[ selected get [] cons [mix-percent] def drop ] [change] mixPercentSelect subscribe
 
 # setup the painting area 
 canvas cb-init cb-clear

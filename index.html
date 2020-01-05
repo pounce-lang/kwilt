@@ -150,6 +150,20 @@
       cursor: pointer;
       margin: 5px;
     }
+    .mix-select {
+      border-radius: 4px;
+      background: linear-gradient(to right,  #fa98b0, #fada83);
+      border: none;
+      color: #000000;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 20px;
+      padding: 15px;
+      width: 120px;
+      transition: all 0.4s;
+      cursor: pointer;
+      margin: 5px;
+    }
   </style>
 </head>
 
@@ -170,6 +184,12 @@
         <div class="row-container">
           <button id="pickBtn" class="pick-button">pick colors</button>
           <button id="mixBtn" class="mix-button">mix</button>
+          <select id="mixPercentSelect"  class="mix-select">
+            <option value="1">100%</option>
+            <option value="0.5">50%</option>
+            <option selected="selected" value="0.25">25%</option>
+            <option value="0.1">10%</option>
+          </select>
         </div>
       </div>
     </div>

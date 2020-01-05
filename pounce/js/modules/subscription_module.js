@@ -2,10 +2,11 @@
   'use strict';
 
   function runSub(event) {
-    const x = event.offsetX;
-    const y = event.offsetY;
-    const buttons = event.buttons; // button state
-    const evt = { x, y, buttons };
+    const x = event.offsetX || 0;
+    const y = event.offsetY || 0;
+    const buttons = event.buttons || 0; // button state
+    const selected = event.target ? event.target.value || null : null;
+    const evt = { x, y, buttons, selected };
     const key = event.type + event.target.id;
     const [_, resultstack] = pounce.run([evt, ...lookup[key][0]], lookup[key][1], lookup[key][2]);
     pounce.resumable.stack = [...pounce.resumable.stack, ...pounce.cloneItem(resultstack)];
