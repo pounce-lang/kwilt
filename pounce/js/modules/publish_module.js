@@ -15,9 +15,9 @@
       }
     },
     'attr-publish': {
-      expects: [{ desc: 'data to be used as text content', ofType: 'string' },
+      expects: [{ desc: 'attribute value', ofType: 'string' },
       { desc: 'attribute name', ofType: 'string' },
-      { desc: 'id of DOM element', ofType: 'string' }
+      { desc: 'DOM element id', ofType: 'string' }
       ], effects: [-2], tests: [], desc: 'publish to a DOM element',
       definition: function (s) {
         const eleId = s.pop();

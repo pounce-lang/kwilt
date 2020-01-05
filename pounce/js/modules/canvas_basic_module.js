@@ -93,6 +93,24 @@
         return [s];
       }
     },
+    'cb-box-ctx': {
+      sig: { args: [{'canvasId': 'DomId'}, { 'x': 'number', 'y': 'number' }, { d: 'record' }] },
+      desc: 'filled box',
+      definition: function (s, pl, ws) {
+        const canvasId = s.pop();
+        const d = s.pop();
+          const ctx = ws[0].ctx[canvasId];
+          if (d.color) {
+            ctx.fillStyle = 'rgba(' + d.color.r + ', ' + d.color.g + ', ' + d.color.b + ', ' + d.color.a + ')';
+          }
+          if (!d.w || !d.h) {
+            d.w = 10;
+            d.h = 10;
+          }
+          ctx.fillRect(d.x, d.y, d.w, d.h);
+        return [s];
+      }
+    },
     'cb-clear': {
       desc: 'clear the full canvas',
       definition: function(s, pl, ws) {

@@ -54,8 +54,19 @@
       min-width: 160px;
     }
 
-    .maine-canvas {
+    .paint-canvas {
       margin: 5px 15px 0 10px;
+      cursor: cell;
+    }
+
+    .palette-canvas {
+      margin: 5px 15px 0 10px;
+      cursor: pointer;
+    }
+
+    .layer-canvas {
+      margin: 5px 15px 0 10px;
+      cursor: pointer;
     }
 
     button {
@@ -109,6 +120,36 @@
       text-align: center;
       vertical-align: middle;
     }
+
+    .pick-button {
+      border-radius: 4px;
+      background: linear-gradient(to right, #4b7429, #3f7bc0) !important;
+      border: none;
+      color: #FFFFFF;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 20px;
+      padding: 15px;
+      width: 180px;
+      transition: all 0.4s;
+      cursor: pointer;
+      margin: 5px 5px 5px 10px;
+    }
+
+    .mix-button {
+      border-radius: 4px;
+      background: linear-gradient(to right, #6d36a1, #d62f59);
+      border: none;
+      color: #FFFFFF;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 20px;
+      padding: 15px;
+      width: 160px;
+      transition: all 0.4s;
+      cursor: pointer;
+      margin: 5px;
+    }
   </style>
 </head>
 
@@ -119,19 +160,18 @@
     </div>
 
     <div class="row-container">
-      <div class="maine-canvas">
-        <canvas width="450" height="350" style="width: 450px; height: 350px" id="canvas"></canvas>
+      <div class="paint-canvas">
+        <canvas width="450" height="650" style="width: 450px; height: 650px" id="canvas"></canvas>
       </div>
-      <div class="maine-canvas">
-        <canvas width="180" height="160" style="width: 180px; height: 160px" id="palette"></canvas>
+      <div class="col-container">
+        <div class="palette-canvas">
+          <canvas width="480" height="160" style="width: 480px; height: 160px" id="palette"></canvas>
+        </div>
+        <div class="row-container">
+          <button id="pickBtn" class="pick-button">pick colors</button>
+          <button id="mixBtn" class="mix-button">mix</button>
+        </div>
       </div>
-
-    </div>
-    <div class="row-container">
-      <button id="aboutBtn" style="width: 200px">info</button>
-      <!-- <button id="galleryBtn" style="width: 200px">make a gallery</button>
-      <button id="howtoBtn" style="width: 200px">save share and help</button> -->
-      <button id="feedbackBtn" style="width: 200px">complaint deptartment</button>
     </div>
 
     <div id="about-section" style="display: none;">
