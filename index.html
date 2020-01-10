@@ -25,10 +25,10 @@
     }
 
     .main-page {
-      max-width: 978px;
+      max-width: 1000px;
     }
 
-    @media screen and (min-width: 1110px) {
+    @media screen and (min-width: 1230px) {
       .main-page {
         padding-left: 90px;
         padding-right: 90px;
@@ -51,7 +51,7 @@
       margin-block-start: 2px;
       margin: 5px;
       padding: 10px;
-      min-width: 160px;
+      min-width: 1000px;
     }
 
     .paint-canvas {
@@ -123,7 +123,7 @@
 
     .pick-button {
       border-radius: 4px;
-      background: linear-gradient(to right, #4b7429, #3f7bc0) !important;
+      background: linear-gradient(to right, #4b7429, #3f7bc0);
       border: none;
       color: #FFFFFF;
       text-align: center;
@@ -150,9 +150,10 @@
       cursor: pointer;
       margin: 5px;
     }
+
     .mix-select {
       border-radius: 4px;
-      background: linear-gradient(to right,  #fa98b0, #fada83);
+      background: linear-gradient(to right, #fa98b0, #fada83);
       border: none;
       color: #000000;
       text-align: center;
@@ -174,9 +175,23 @@
     </div>
 
     <div class="row-container">
-      <div class="paint-canvas">
-        <canvas width="450" height="650" style="width: 450px; height: 650px" id="canvas"></canvas>
+
+      <div class="col-container">
+        <div class="paint-canvas">
+          <canvas width="470" height="550" style="width: 470px; height: 550px" id="canvas"></canvas>
+        </div>
+        <!-- <div class="row-container">
+          <button id="pickBtn" class="pick-button">pick colors</button>
+          <button id="mixBtn" class="mix-button">mix</button>
+          <select id="mixPercentSelect" class="mix-select">
+            <option value="1">100%</option>
+            <option value="0.5">50%</option>
+            <option selected="selected" value="0.25">25%</option>
+            <option value="0.1">10%</option>
+          </select>
+        </div> -->
       </div>
+
       <div class="col-container">
         <div class="palette-canvas">
           <canvas width="480" height="160" style="width: 480px; height: 160px" id="palette"></canvas>
@@ -184,7 +199,7 @@
         <div class="row-container">
           <button id="pickBtn" class="pick-button">pick colors</button>
           <button id="mixBtn" class="mix-button">mix</button>
-          <select id="mixPercentSelect"  class="mix-select">
+          <select id="mixPercentSelect" class="mix-select">
             <option value="1">100%</option>
             <option value="0.5">50%</option>
             <option selected="selected" value="0.25">25%</option>

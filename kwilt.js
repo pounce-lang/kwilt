@@ -47,6 +47,7 @@ uncons [drop] dip
     [mix-block]
     [palette cb-color-at [] cons [picked-color] def]
   ifte
+#  set-palette-mode log
 ] [mousedown] palette subscribe 
 
 [ selected get [] cons [mix-percent] def drop ] [change] mixPercentSelect subscribe
@@ -65,17 +66,17 @@ canvas cb-init cb-clear
 [ [false] [mouse-button-down] def] [mouseout] canvas subscribe 
 [ buttons get 1 == mouse-button-down or [print-block] [drop] ifte] [mousemove] canvas subscribe 
 
-[true] [mixPaletteMode] def
-'text-decoration:underline;' str-dequote style mixBtn attr-publish
-'text-decoration:none;' str-dequote style pickBtn attr-publish
-[drop [true] [mixPaletteMode] def 
+[[true] [mixPaletteMode] def 
   'text-decoration:underline;' str-dequote style mixBtn attr-publish
-  'text-decoration:none;' str-dequote style pickBtn attr-publish
-] [mousedown] mixBtn subscribe
-[drop [false] [mixPaletteMode] def 
-  'text-decoration:underline;' str-dequote style pickBtn attr-publish
-  'text-decoration:none;' str-dequote style mixBtn attr-publish
-] [mousedown] pickBtn subscribe
+  'text-decoration:none;' str-dequote style pickBtn attr-publish] [set-palette-mode] def
+
+[[false] [mixPaletteMode] def 
+'text-decoration:underline;' str-dequote style pickBtn attr-publish
+'text-decoration:none;' str-dequote style mixBtn attr-publish] [reset-palette-mode] def
+
+set-palette-mode
+[drop set-palette-mode] [mousedown] mixBtn subscribe
+[drop reset-palette-mode] [mousedown] pickBtn subscribe
 
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
