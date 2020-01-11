@@ -11,7 +11,7 @@ publish_module import
 
 palette cb-init cb-clear
 # set up the colors of the palette for picking colors and mixing
-{x:0 y:0 w:600 h:200 color:{r:255 g:255 b:255 a:1}} cb-box
+{x:0 y:0 w:600 h:200 color:{r:127 g:127 b:127 a:1}} cb-box
 
 # [ '#f0f' '#f00' '#ff0' '#0f0' '#0ff' '#00f' '#f0f']
 # [ '#f0f' '#00f' '#0ff' '#0f0' '#ff0' '#f00' '#f0f' ] # reversed
@@ -31,11 +31,11 @@ uncons [drop] dip
 [boxit gx 10 + [] cons [gx] def] map drop
 [7.3 6.5 5.3 4.1 3 2 1 0]
 [0] [gy] def
-[{r:255 g:255 b:255} swap 8 / a set {x:0 w:180 h:10} swap color set gy y set cb-box] [layerit] def
+[{r:255 g:255 b:255} swap 8 / a set {x:0 w:190 h:10} swap color set gy y set cb-box] [layerit] def
 [layerit gy 10 + [] cons [gy] def] map drop
 
 [0.5 1 2 3.2 4.5 5.8 6.7 7.5]
-[{r:0 g:0 b:0} swap 8 / a set {x:0 w:180 h:10} swap color set gy y set cb-box] [layerit] def
+[{r:0 g:0 b:0} swap 8 / a set {x:0 w:190 h:10} swap color set gy y set cb-box] [layerit] def
 [layerit gy 10 + [] cons [gy] def] map drop
 
 [0.25] [mix-percent] def
@@ -43,7 +43,7 @@ uncons [drop] dip
     {w:20 h:20} swap merge picked-color mix-percent a set color set palette cb-box-ctx
 ] [mix-block] def
 
-[ x get 180 > mixPaletteMode and
+[ x get 190 > mixPaletteMode and
     [mix-block]
     [palette cb-color-at [] cons [picked-color] def]
   ifte
@@ -58,7 +58,12 @@ canvas cb-init cb-clear
 {x:0 y:0 w:1200 h:1200 color:{r:255 g:255 b:255 a:1}} cb-box
 
 [ x get 10 - 20 / 1 round 20 * x set y get 10 - 20 / 1 round 20 * y set 
-  {w:20 h:20} swap merge picked-color color set cb-box
+  {w:20 h:20} swap merge picked-color color set 
+  dup
+  canvas cb-box-ctx
+  [
+    layer-view-canvas cb-box-ctx
+  ] cons {xsc:0.3 ysc:0.3 xsk:0 ysk:-0.02 xtr:40 ytr:30} cb-transform
 ] [print-block] def
 
 [false] [mouse-button-down] def
@@ -78,6 +83,19 @@ canvas cb-init cb-clear
 set-palette-mode
 [drop set-palette-mode] [mousedown] mixBtn subscribe
 [drop reset-palette-mode] [mousedown] pickBtn subscribe
+
+
+#layer nav
+layer-view-canvas cb-init cb-clear
+[
+  {color:{r:255 g:255 b:255 a:0.6} x:0 y:0 w:480 h:560} cb-box
+] {xsc:0.3 ysc:0.3 xsk:0 ysk:-0.02 xtr:40 ytr:30} cb-transform
+[
+  {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
+] {xsc:0.35 ysc:0.35 xsk:0 ysk:-0.03 xtr:130 ytr:50} cb-transform
+[
+  {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
+] {xsc:0.4 ysc:0.4 xsk:0 ysk:-0.04 xtr:230 ytr:80} cb-transform
 
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
