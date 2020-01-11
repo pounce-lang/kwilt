@@ -47,6 +47,7 @@ uncons [drop] dip
     [mix-block]
     [palette cb-color-at [] cons [picked-color] def]
   ifte
+drop
 #  set-palette-mode log
 ] [mousedown] palette subscribe 
 
