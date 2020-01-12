@@ -12,6 +12,7 @@ publish_module import
 palette cb-init cb-clear
 # set up the colors of the palette for picking colors and mixing
 {x:0 y:0 w:600 h:200 color:{r:127 g:127 b:127 a:1}} cb-box
+{x:200 y:0 w:400 h:200 color:{r:255 g:255 b:255 a:1}} cb-box
 
 # [ '#f0f' '#f00' '#ff0' '#0f0' '#0ff' '#00f' '#f0f']
 # [ '#f0f' '#00f' '#0ff' '#0f0' '#ff0' '#f00' '#f0f' ] # reversed
@@ -31,19 +32,22 @@ uncons [drop] dip
 [boxit gx 10 + [] cons [gx] def] map drop
 [7.3 6.5 5.3 4.1 3 2 1 0]
 [0] [gy] def
-[{r:255 g:255 b:255} swap 8 / a set {x:0 w:190 h:10} swap color set gy y set cb-box] [layerit] def
+[{r:255 g:255 b:255} swap 8 / a set {x:0 w:200 h:10} swap color set gy y set cb-box] [layerit] def
 [layerit gy 10 + [] cons [gy] def] map drop
 
 [0.5 1 2 3.2 4.5 5.8 6.7 7.5]
-[{r:0 g:0 b:0} swap 8 / a set {x:0 w:190 h:10} swap color set gy y set cb-box] [layerit] def
+[{r:0 g:0 b:0} swap 8 / a set {x:0 w:200 h:10} swap color set gy y set cb-box] [layerit] def
 [layerit gy 10 + [] cons [gy] def] map drop
 
+# mix and paint
+
 [0.25] [mix-percent] def
+
 [ x get 10 - 20 / 1 round 20 * x set y get 10 - 20 / 1 round 20 * y set 
     {w:20 h:20} swap merge picked-color mix-percent a set color set palette cb-box-ctx
 ] [mix-block] def
 
-[ x get 190 > mixPaletteMode and
+[ x get 200 > mixPaletteMode and
     [mix-block]
     [palette cb-color-at [] cons [picked-color] def]
   ifte
@@ -52,13 +56,16 @@ drop
 ] [mousedown] palette subscribe 
 
 [ selected get [] cons [mix-percent] def drop ] [change] mixPercentSelect subscribe
+[ selected get [] cons [canvas-mix-percent] def drop ] [change] canvasMixPercentSelect subscribe
 
 # setup the painting area 
 canvas cb-init cb-clear
 {x:0 y:0 w:1200 h:1200 color:{r:255 g:255 b:255 a:1}} cb-box
 
+[1] [canvas-mix-percent] def
+
 [ x get 10 - 20 / 1 round 20 * x set y get 10 - 20 / 1 round 20 * y set 
-  {w:20 h:20} swap merge picked-color color set 
+  {w:20 h:20} swap merge picked-color canvas-mix-percent a set color set 
   dup
   canvas cb-box-ctx
   [
@@ -83,6 +90,20 @@ canvas cb-init cb-clear
 set-palette-mode
 [drop set-palette-mode] [mousedown] mixBtn subscribe
 [drop reset-palette-mode] [mousedown] pickBtn subscribe
+
+
+[[true] [mixCanvasMode] def 
+  'text-decoration:underline;' str-dequote style canvasMixBtn attr-publish
+  'text-decoration:none;' str-dequote style canvasPickBtn attr-publish] [set-canvas-mode] def
+
+[[false] [mixCanvasMode] def 
+  'text-decoration:underline;' str-dequote style canvasPickBtn attr-publish
+  'text-decoration:none;' str-dequote style canvasMixBtn attr-publish
+] [reset-canvas-mode] def
+
+set-canvas-mode
+[drop set-canvas-mode] [mousedown] canvasMixBtn subscribe
+[drop reset-canvas-mode] [mousedown] canvasPickBtn subscribe
 
 
 #layer nav
