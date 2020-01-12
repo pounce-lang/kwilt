@@ -57,6 +57,9 @@
     .paint-canvas {
       margin: 5px 15px 0 10px;
       cursor: cell;
+      position: relative;
+      height: 565px;
+      width: 485px;
     }
 
     .palette-canvas {
@@ -178,7 +181,9 @@
 
       <div class="col-container">
         <div class="paint-canvas">
-          <canvas width="480" height="560" style="width: 480px; height: 560px" id="canvas"></canvas>
+          <canvas id="canvas0" width="480" height="560" style="position: absolute; top: 0; left: 0; width: 480px; height: 560px"></canvas>
+          <canvas id="canvas1" width="480" height="560" style="position: absolute; top: 0; left: 0; width: 480px; height: 560px"></canvas>
+          <canvas id="canvas2" width="480" height="560" style="position: absolute; top: 0; left: 0; width: 480px; height: 560px"></canvas>
         </div>
         <div class="row-container">
           <button id="canvasPickBtn" class="pick-button">pick colors</button>

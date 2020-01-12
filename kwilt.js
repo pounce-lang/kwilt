@@ -59,25 +59,28 @@ drop
 [ selected get [] cons [canvas-mix-percent] def drop ] [change] canvasMixPercentSelect subscribe
 
 # setup the painting area 
-canvas cb-init cb-clear
-{x:0 y:0 w:1200 h:1200 color:{r:255 g:255 b:255 a:1}} cb-box
+canvas0 cb-init cb-clear
+canvas1 cb-init cb-clear
+canvas2 cb-init cb-clear
+[0] [paint-on-layer] def
+{x:0 y:0 w:1200 h:1200 color:{r:255 g:255 b:255 a:1}} canvas0 cb-box-ctx
 
 [1] [canvas-mix-percent] def
 
 [ x get 10 - 20 / 1 round 20 * x set y get 10 - 20 / 1 round 20 * y set 
   {w:20 h:20} swap merge picked-color canvas-mix-percent a set color set 
   dup
-  canvas cb-box-ctx
+  canvas paint-on-layer str-append cb-box-ctx
   [
     layer-view-canvas cb-box-ctx
-  ] cons {xsc:0.3 ysc:0.3 xsk:0 ysk:-0.02 xtr:40 ytr:30} cb-transform
+  ] cons transform-array paint-on-layer get [drop] dip cb-transform
 ] [print-block] def
 
 [false] [mouse-button-down] def
-[ print-block [true] [mouse-button-down] def] [mousedown] canvas subscribe 
-[ [false] [mouse-button-down] def] [mouseup] canvas subscribe 
-[ [false] [mouse-button-down] def] [mouseout] canvas subscribe 
-[ buttons get 1 == mouse-button-down or [print-block] [drop] ifte] [mousemove] canvas subscribe 
+[ print-block [true] [mouse-button-down] def] [mousedown] canvas2 subscribe 
+[ [false] [mouse-button-down] def] [mouseup] canvas2 subscribe 
+[ [false] [mouse-button-down] def] [mouseout] canvas2 subscribe 
+[ buttons get 1 == mouse-button-down or [print-block] [drop] ifte] [mousemove] canvas2 subscribe 
 
 [[true] [mixPaletteMode] def 
   'text-decoration:underline;' str-dequote style mixBtn attr-publish
@@ -105,18 +108,35 @@ set-canvas-mode
 [drop set-canvas-mode] [mousedown] canvasMixBtn subscribe
 [drop reset-canvas-mode] [mousedown] canvasPickBtn subscribe
 
+[{0:{xsc:0.3 ysc:0.3 xsk:0 ysk:-0.02 xtr:40 ytr:30}
+  1:{xsc:0.35 ysc:0.35 xsk:0 ysk:-0.03 xtr:130 ytr:50}
+  2:{xsc:0.4 ysc:0.4 xsk:0 ysk:-0.04 xtr:230 ytr:80}
+  }] [transform-array] def
 
 #layer nav
 layer-view-canvas cb-init cb-clear
 [
   {color:{r:255 g:255 b:255 a:0.6} x:0 y:0 w:480 h:560} cb-box
-] {xsc:0.3 ysc:0.3 xsk:0 ysk:-0.02 xtr:40 ytr:30} cb-transform
+] transform-array 0 get [drop] dip cb-transform
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
-] {xsc:0.35 ysc:0.35 xsk:0 ysk:-0.03 xtr:130 ytr:50} cb-transform
+] transform-array 1 get [drop] dip cb-transform
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
-] {xsc:0.4 ysc:0.4 xsk:0 ysk:-0.04 xtr:230 ytr:80} cb-transform
+] transform-array 2 get [drop] dip cb-transform
+
+# layer events
+[ x get 130 < 
+    [0]
+    [x get 260 < 
+      [1]
+      [2]
+    ifte
+  ]
+  ifte
+  [] cons [paint-on-layer] def
+ drop drop
+] [mousedown] layer-view-canvas subscribe
 
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
@@ -127,5 +147,5 @@ const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_
 // topEle.appendChild(p);
 
 
-// var dataURL = canvas.toDataURL();
+// var dataURL = canvas0.toDataURL();
 // console.log(dataURL);
