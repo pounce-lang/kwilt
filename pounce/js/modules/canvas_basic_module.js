@@ -107,6 +107,9 @@
             d.w = 10;
             d.h = 10;
           }
+          if (canvasId.indexOf('palette') !== 0) {
+            ctx.clearRect(d.x, d.y, d.w, d.h);
+          }
           ctx.fillRect(d.x, d.y, d.w, d.h);
         return [s];
       }
