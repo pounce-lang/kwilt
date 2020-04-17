@@ -39,6 +39,33 @@ uncons [drop] dip
 [{r:0 g:0 b:0} swap 8 / a set {x:0 w:200 h:10} swap color set gy y set cb-box] [layerit] def
 [layerit gy 10 + [] cons [gy] def] map drop
 
+[
+  drop 
+  {x:320 y:70 w:20 h:20} picked-color color set palette cb-box-ctx  
+  {x:320 y:50  w:20 h:20} picked-color 1 chroma-brighten color set palette cb-box-ctx  
+  {x:320 y:30  w:20 h:20} picked-color 2 chroma-brighten color set palette cb-box-ctx  
+  {x:320 y:10  w:20 h:20} picked-color 3 chroma-brighten color set palette cb-box-ctx  
+  {x:320 y:90 w:20 h:20} picked-color -1 chroma-brighten color set palette cb-box-ctx  
+  {x:320 y:110 w:20 h:20} picked-color -2 chroma-brighten color set palette cb-box-ctx  
+  {x:320 y:130 w:20 h:20} picked-color -3 chroma-brighten color set palette cb-box-ctx  
+
+  {x:300 y:70  w:20 h:20} picked-color -10 chroma-rotate color set palette cb-box-ctx  
+  {x:280 y:70  w:20 h:20} picked-color -20 chroma-rotate color set palette cb-box-ctx  
+  {x:260 y:70  w:20 h:20} picked-color -30 chroma-rotate color set palette cb-box-ctx  
+  {x:240 y:70  w:20 h:20} picked-color -40 chroma-rotate color set palette cb-box-ctx  
+  {x:340 y:70 w:20 h:20} picked-color 10 chroma-rotate color set palette cb-box-ctx  
+  {x:360 y:70 w:20 h:20} picked-color 20 chroma-rotate color set palette cb-box-ctx  
+  {x:380 y:70 w:20 h:20} picked-color 30 chroma-rotate color set palette cb-box-ctx  
+  {x:400 y:70 w:20 h:20} picked-color 40 chroma-rotate color set palette cb-box-ctx  
+
+  {x:300 y:90  w:20 h:20} picked-color 1 chroma-saturate color set palette cb-box-ctx  
+  {x:280 y:110  w:20 h:20} picked-color 2 chroma-saturate color set palette cb-box-ctx  
+  {x:260 y:130  w:20 h:20} picked-color 3 chroma-saturate color set palette cb-box-ctx  
+  {x:340 y:50 w:20 h:20} picked-color -1 chroma-saturate color set palette cb-box-ctx  
+  {x:360 y:30 w:20 h:20} picked-color -2 chroma-saturate color set palette cb-box-ctx  
+  {x:380 y:10 w:20 h:20} picked-color -3 chroma-saturate color set palette cb-box-ctx  
+] [blend-pallet] def
+
 # mix and paint
 
 [0.25] [mix-percent] def
@@ -49,7 +76,7 @@ uncons [drop] dip
 
 [ x get 200 > mixPaletteMode and
     [mix-block]
-    [palette cb-color-at [] cons [picked-color] def]
+    [palette cb-color-at [] cons [picked-color] def blend-pallet]
   ifte
 drop
 #  set-palette-mode log
@@ -83,14 +110,14 @@ canvas2 cb-init cb-clear
 [ buttons get 1 == mouse-button-down or [print-block] [drop] ifte] [mousemove] canvas2 subscribe 
 
 [[true] [mixPaletteMode] def 
-  'text-decoration:underline;' str-dequote style mixBtn attr-publish
-  'text-decoration:none;' str-dequote style pickBtn attr-publish] [set-palette-mode] def
+'text-decoration:underline;' str-dequote style mixBtn attr-publish
+'text-decoration:none;' str-dequote style pickBtn attr-publish] [set-palette-mode] def
 
 [[false] [mixPaletteMode] def 
 'text-decoration:underline;' str-dequote style pickBtn attr-publish
 'text-decoration:none;' str-dequote style mixBtn attr-publish] [reset-palette-mode] def
 
-set-palette-mode
+# set-palette-mode
 [drop set-palette-mode] [mousedown] mixBtn subscribe
 [drop reset-palette-mode] [mousedown] pickBtn subscribe
 

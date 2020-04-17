@@ -35,6 +35,48 @@
         s.push({r:rgb[0], g:rgb[1], b:rgb[2], a:1});
         return [s];
       }
+    },
+    'chroma-brighten': {
+      expects: [
+        { desc: 'color', ofType: 'record' }, {desc:'amount', ofType: 'number'}
+      ],
+      effects: [0], tests: [], desc: `brighten a color {r:? g:?, b:?} record`,
+      definition: function (s) {
+        const amount = s.pop();
+        const color = s.pop(); 
+        const rgb = chroma(color).brighten(amount).get('rgb');
+        s.push({r:rgb[0], g:rgb[1], b:rgb[2], a:1});
+        return [s];
+      }
+    },
+    'chroma-saturate': {
+      expects: [
+        { desc: 'color', ofType: 'record' }, {desc:'amount', ofType: 'number'}
+      ],
+      effects: [0], tests: [], desc: `saturate a color {r:? g:?, b:?} record`,
+      definition: function (s) {
+        const amount = s.pop();
+        const color = s.pop(); 
+        const rgb = chroma(color).saturate(amount).get('rgb');
+        s.push({r:rgb[0], g:rgb[1], b:rgb[2], a:1});
+        return [s];
+      }
+    },
+    'chroma-rotate': {
+      expects: [
+        { desc: 'color', ofType: 'record' }, {desc:'twist', ofType: 'number'}
+      ],
+      effects: [0], tests: [], desc: `rotate the hue of a color by degrees`,
+      definition: function (s) {
+        const degrees = s.pop();
+        const color = s.pop(); 
+        const hue = chroma(color).get('hsl.h');
+        const newHue = (hue + degrees + 360)%360;
+        console.log(hue, newHue);
+        const rgb = chroma(color).set('hsl.h', newHue).get('rgb');
+        s.push({r:rgb[0], g:rgb[1], b:rgb[2], a:1});
+        return [s];
+      }
     }
   };
 
@@ -47,7 +89,8 @@ chroma_module import
 canvas cb-init cb-clear
 # [ '#f0f' '#f00' '#ff0' '#0f0' '#0ff' '#00f' '#f0f']
 # [ '#f0f' '#00f' '#0ff' '#0f0' '#ff0' '#f00' '#f0f' ] # reversed
- [ '#0f0' '#0ff' '#00f' '#f0f' '#f00' '#ff0' '#0f0' ] # offset (kkh's pick)
+ [ '#,
+ '.saturate'0f0' '#0ff' '#00f' '#f0f' '#f00' '#ff0' '#0f0' ] # offset (kkh's pick)
 # [ '#0f0' '#ff0' '#f00' '#f0f' '#00f' '#0ff' '#0f0' ] # offset and reversed
 [str-dequote] map
 #lrgb
