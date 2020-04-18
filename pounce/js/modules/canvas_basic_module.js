@@ -94,26 +94,47 @@
       }
     },
     'cb-box-ctx': {
-      sig: { args: [{'canvasId': 'DomId'}, { 'x': 'number', 'y': 'number' }, { d: 'record' }] },
+      sig: { args: [{ 'canvasId': 'DomId' }, { 'x': 'number', 'y': 'number' }, { d: 'record' }] },
       desc: 'filled box',
       definition: function (s, pl, ws) {
         const canvasId = s.pop();
         const d = s.pop();
-          const ctx = ws[0].ctx[canvasId];
-          if (d.color) {
-            ctx.fillStyle = 'rgba(' + d.color.r + ', ' + d.color.g + ', ' + d.color.b + ', ' + d.color.a + ')';
-          }
-          if (!d.w || !d.h) {
-            d.w = 10;
-            d.h = 10;
-          }
-          ctx.fillRect(d.x, d.y, d.w, d.h);
+        const ctx = ws[0].ctx[canvasId];
+        if (d.color) {
+          ctx.fillStyle = 'rgba(' + d.color.r + ', ' + d.color.g + ', ' + d.color.b + ', ' + d.color.a + ')';
+        }
+        if (!d.w || !d.h) {
+          d.w = 10;
+          d.h = 10;
+        }
+        ctx.clearRect(d.x, d.y, d.w, d.h);
+        ctx.fillRect(d.x, d.y, d.w, d.h);
+        return [s];
+      }
+    },
+    'cb-rect-ctx': {
+      sig: { args: [{ 'canvasId': 'DomId' }, { 'x': 'number', 'y': 'number' }, { d: 'record' }] },
+      desc: 'filled box',
+      definition: function (s, pl, ws) {
+        const canvasId = s.pop();
+        const d = s.pop();
+        // console.log(d.color);
+        const ctx = ws[0].ctx[canvasId];
+        var imageData = ctx.getImageData(d.x, d.y, d.w, d.h);
+        var data = imageData.data;
+        for (var i = 0; i < data.length; i += 4) {
+          data[i] = d.color.r;     // red
+          data[i + 1] = d.color.g; // green
+          data[i + 2] = d.color.b; // blue
+          data[i + 3] = d.color.a * 255; // alpha
+        }
+        ctx.putImageData(imageData, d.x, d.y);
         return [s];
       }
     },
     'cb-clear': {
       desc: 'clear the full canvas',
-      definition: function(s, pl, ws) {
+      definition: function (s, pl, ws) {
         const ctx = ws[0].ctx[ws[0].ctx_default];
         const w = ctx.canvas.width;
         const h = ctx.canvas.height;
@@ -123,7 +144,7 @@
     },
     'cb-load-image': {
       desc: 'given a src load an image (async)',
-      definition: function(s, pl, ws) {
+      definition: function (s, pl, ws) {
         const src = s.pop();
         const ctx = ws[0].ctx[ws[0].ctx_default];
         if (!ctx.images) {
@@ -142,7 +163,7 @@
     },
     'cb-nth-image': {
       desc: 'show the nth loaded image (see: cb-load-image)',
-      definition: function(s, pl, ws) {
+      definition: function (s, pl, ws) {
         const n = s.pop();
         const ctx = ws[0].ctx[ws[0].ctx_default];
         ctx.drawImage(ctx.images[n], 0, 0);
@@ -151,13 +172,13 @@
     },
     'cb-color-at': {
       desc: 'get the pixel color at an x y location',
-      definition: function(s, pl, ws) {
+      definition: function (s, pl, ws) {
         const canvasId = s.pop();
         const pt = s.pop();
         const ctx = ws[0].ctx[canvasId];
         var pixel = ctx.getImageData(pt.x, pt.y, 1, 1);
         var data = pixel.data;
-        var rgba = { r: data[0], g: data[1], b: data[2], a: (data[3] / 255)};
+        var rgba = { r: data[0], g: data[1], b: data[2], a: (data[3] / 255) };
         s.push(rgba);
         return [s];
       }
@@ -176,7 +197,7 @@
     // draw-with-skew
     'cb-transform-invoke': {
       desc: 'transform it {xsc:1 ysc:1 xsk:0 ysk:0 xtr:0 ytr:0} (sc)ale (sk)ew (tr)anslate',
-      definition: function(s, pl, ws) {
+      definition: function (s, pl, ws) {
         const tf = s.pop();
         const ctx = ws[0].ctx[ws[0].ctx_default];
         ctx.save();
@@ -186,7 +207,7 @@
     },
     'cb-transform-restore': {
       desc: 'transform it {xsc:1 xsk:0 ysk:0 ysc:1 xtr:0 ytr:0} (sc)ale (sk)ew (tr)anslate',
-      definition: function(s, pl, ws) {
+      definition: function (s, pl, ws) {
         const ctx = ws[0].ctx[ws[0].ctx_default];
         ctx.restore();
         return [s];
@@ -200,7 +221,7 @@
     //   {color:{r:127 g:127 b:127 a:0.5} x:70 y:60 w:100 h:70} cb-box
     //   {color:{r:127 g:127 b:127 a:0.5} x:130 y:90 w:100 h:70} cb-box
     // ] {xsc:1 ysc:1 xsk:0 ysk:-0.2 xtr:0 ytr:0} cb-transform
-    
+
     'cb-transform': {
       expects: [{ desc: 'phrase', ofType: 'list' }, { desc: 'a scale skew translate record', ofType: 'record' }], effects: [-2], tests: [], desc: 'apply a transform on a phrase',
       definition: function (s, pl, ws) {

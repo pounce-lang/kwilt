@@ -55,6 +55,7 @@
     }
 
     .paint-canvas {
+      background-color: #FFFFFF;
       margin: 5px 15px 0 10px;
       cursor: cell;
       position: relative;
@@ -70,6 +71,9 @@
     .layer-canvas {
       margin: 5px 15px 0 10px;
       cursor: pointer;
+      position: relative;
+      height: 340px;
+      width: 485px;
     }
 
     button {
@@ -186,13 +190,14 @@
           <canvas id="canvas2" width="480" height="560" style="position: absolute; top: 0; left: 0; width: 480px; height: 560px"></canvas>
         </div>
         <div class="row-container">
-          <button id="canvasPickBtn" class="pick-button">pick colors</button>
-          <button id="canvasMixBtn" class="mix-button">paint</button>
+          <!-- <button id="canvasPickBtn" class="pick-button">pick colors</button>
+          <button id="canvasMixBtn" class="mix-button">paint</button> -->
           <select id="canvasMixPercentSelect" class="mix-select">
             <option selected="selected" value="1">100%</option>
             <option value="0.5">50%</option>
             <option value="0.25">25%</option>
             <option value="0.1">10%</option>
+            <option value="0.0">0%</option>
           </select>
         </div>
       </div>
@@ -202,18 +207,21 @@
           <canvas width="480" height="160" style="width: 480px; height: 160px" id="palette"></canvas>
         </div>
         <div class="row-container">
-          <button id="pickBtn" class="pick-button">pick colors</button>
-          <button id="mixBtn" class="mix-button">mix</button>
+          <!-- <button id="pickBtn" class="pick-button">pick colors</button>
+          <button id="mixBtn" class="mix-button">Eracer</button>
           <select id="mixPercentSelect" class="mix-select">
             <option value="1">100%</option>
             <option value="0.5">50%</option>
             <option selected="selected" value="0.25">25%</option>
             <option value="0.1">10%</option>
-          </select>
+          </select> -->
         </div>
-        <div class="palette-canvas">
-          <!-- layer-view-canvas -->
-          <canvas width="480" height="318" style="width: 480px; height: 318px" id="layer-view-canvas"></canvas>
+        <div class="layer-canvas">
+          <!-- layer-view-canvas-bg and layer-view-canvas -->
+          <canvas width="480" height="330" id="layer-view-canvas-bg"
+          style="position: absolute; top: 0; left: 0; width: 480px; height: 330px"></canvas>
+          <canvas width="480" height="330" id="layer-view-canvas"
+          style="position: absolute; top: 0; left: 0; width: 480px; height: 330px"></canvas>
         </div>
       </div>
     </div>

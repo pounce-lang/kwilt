@@ -67,6 +67,7 @@ uncons [drop] dip
 ] [blend-pallet] def
 
 # mix and paint
+[{r:255 g:255 b:255}] [picked-color] def
 
 [0.25] [mix-percent] def
 
@@ -82,7 +83,7 @@ drop
 #  set-palette-mode log
 ] [mousedown] palette subscribe 
 
-[ selected get [] cons [mix-percent] def drop ] [change] mixPercentSelect subscribe
+##[ selected get [] cons [mix-percent] def drop ] [change] mixPercentSelect subscribe
 [ selected get [] cons [canvas-mix-percent] def drop ] [change] canvasMixPercentSelect subscribe
 
 # setup the painting area 
@@ -110,46 +111,60 @@ canvas2 cb-init cb-clear
 [ buttons get 1 == mouse-button-down or [print-block] [drop] ifte] [mousemove] canvas2 subscribe 
 
 [[true] [mixPaletteMode] def 
-'text-decoration:underline;' str-dequote style mixBtn attr-publish
-'text-decoration:none;' str-dequote style pickBtn attr-publish] [set-palette-mode] def
+##'text-decoration:underline;' str-dequote style mixBtn attr-publish
+##'text-decoration:none;' str-dequote style pickBtn attr-publish
+] [set-palette-mode] def
 
 [[false] [mixPaletteMode] def 
-'text-decoration:underline;' str-dequote style pickBtn attr-publish
-'text-decoration:none;' str-dequote style mixBtn attr-publish] [reset-palette-mode] def
+##'text-decoration:underline;' str-dequote style pickBtn attr-publish
+##'text-decoration:none;' str-dequote style mixBtn attr-publish
+] [reset-palette-mode] def
 
 # set-palette-mode
-[drop set-palette-mode] [mousedown] mixBtn subscribe
-[drop reset-palette-mode] [mousedown] pickBtn subscribe
+##[drop set-palette-mode] [mousedown] mixBtn subscribe
+##[drop reset-palette-mode] [mousedown] pickBtn subscribe
 
 
 [[true] [mixCanvasMode] def 
-  'text-decoration:underline;' str-dequote style canvasMixBtn attr-publish
-  'text-decoration:none;' str-dequote style canvasPickBtn attr-publish] [set-canvas-mode] def
+##  'text-decoration:underline;' str-dequote style canvasMixBtn attr-publish
+##  'text-decoration:none;' str-dequote style canvasPickBtn attr-publish
+] [set-canvas-mode] def
 
 [[false] [mixCanvasMode] def 
-  'text-decoration:underline;' str-dequote style canvasPickBtn attr-publish
-  'text-decoration:none;' str-dequote style canvasMixBtn attr-publish
+##  'text-decoration:underline;' str-dequote style canvasPickBtn attr-publish
+##  'text-decoration:none;' str-dequote style canvasMixBtn attr-publish
 ] [reset-canvas-mode] def
 
 set-canvas-mode
-[drop set-canvas-mode] [mousedown] canvasMixBtn subscribe
-[drop reset-canvas-mode] [mousedown] canvasPickBtn subscribe
+##[drop set-canvas-mode] [mousedown] canvasMixBtn subscribe
+##[drop reset-canvas-mode] [mousedown] canvasPickBtn subscribe
 
-[{0:{xsc:0.3 ysc:0.3 xsk:0 ysk:-0.02 xtr:40 ytr:30}
-  1:{xsc:0.35 ysc:0.35 xsk:0 ysk:-0.03 xtr:130 ytr:50}
-  2:{xsc:0.4 ysc:0.4 xsk:0 ysk:-0.04 xtr:230 ytr:80}
+[{0:{xsc:0.3 ysc:0.35 xsk:0 ysk:-0.02 xtr:40 ytr:30}
+  1:{xsc:0.35 ysc:0.4 xsk:0 ysk:-0.03 xtr:130 ytr:50}
+  2:{xsc:0.4 ysc:0.45 xsk:0 ysk:-0.04 xtr:230 ytr:80}
   }] [transform-array] def
 
-#layer nav
-layer-view-canvas cb-init cb-clear
+#layer nav background
+layer-view-canvas-bg cb-init cb-clear
 [
-  {color:{r:255 g:255 b:255 a:0.6} x:0 y:0 w:480 h:560} cb-box
+  {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
 ] transform-array 0 get [drop] dip cb-transform
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
 ] transform-array 1 get [drop] dip cb-transform
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
+] transform-array 2 get [drop] dip cb-transform
+#layer nav preview
+layer-view-canvas cb-init cb-clear
+[
+  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
+] transform-array 0 get [drop] dip cb-transform
+[
+  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
+] transform-array 1 get [drop] dip cb-transform
+[
+  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
 ] transform-array 2 get [drop] dip cb-transform
 
 # layer events

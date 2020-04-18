@@ -32,49 +32,48 @@
       definition: function (s) {
         const hexColor = s.pop(); // '#0000ff'
         const rgb = chroma(hexColor).get('rgb');
-        s.push({r:rgb[0], g:rgb[1], b:rgb[2], a:1});
+        s.push({ r: rgb[0], g: rgb[1], b: rgb[2], a: 1 });
         return [s];
       }
     },
     'chroma-brighten': {
       expects: [
-        { desc: 'color', ofType: 'record' }, {desc:'amount', ofType: 'number'}
+        { desc: 'color', ofType: 'record' }, { desc: 'amount', ofType: 'number' }
       ],
       effects: [0], tests: [], desc: `brighten a color {r:? g:?, b:?} record`,
       definition: function (s) {
         const amount = s.pop();
-        const color = s.pop(); 
+        const color = s.pop();
         const rgb = chroma(color).brighten(amount).get('rgb');
-        s.push({r:rgb[0], g:rgb[1], b:rgb[2], a:1});
+        s.push({ r: rgb[0], g: rgb[1], b: rgb[2], a: 1 });
         return [s];
       }
     },
     'chroma-saturate': {
       expects: [
-        { desc: 'color', ofType: 'record' }, {desc:'amount', ofType: 'number'}
+        { desc: 'color', ofType: 'record' }, { desc: 'amount', ofType: 'number' }
       ],
       effects: [0], tests: [], desc: `saturate a color {r:? g:?, b:?} record`,
       definition: function (s) {
         const amount = s.pop();
-        const color = s.pop(); 
+        const color = s.pop();
         const rgb = chroma(color).saturate(amount).get('rgb');
-        s.push({r:rgb[0], g:rgb[1], b:rgb[2], a:1});
+        s.push({ r: rgb[0], g: rgb[1], b: rgb[2], a: 1 });
         return [s];
       }
     },
     'chroma-rotate': {
       expects: [
-        { desc: 'color', ofType: 'record' }, {desc:'twist', ofType: 'number'}
+        { desc: 'color', ofType: 'record' }, { desc: 'twist', ofType: 'number' }
       ],
       effects: [0], tests: [], desc: `rotate the hue of a color by degrees`,
       definition: function (s) {
         const degrees = s.pop();
-        const color = s.pop(); 
+        const color = s.pop();
         const hue = chroma(color).get('hsl.h');
-        const newHue = (hue + degrees + 360)%360;
-        console.log(hue, newHue);
+        const newHue = (hue + degrees + 360) % 360;
         const rgb = chroma(color).set('hsl.h', newHue).get('rgb');
-        s.push({r:rgb[0], g:rgb[1], b:rgb[2], a:1});
+        s.push({ r: rgb[0], g: rgb[1], b: rgb[2], a: 1 });
         return [s];
       }
     }
