@@ -41,11 +41,11 @@ uncons [drop] dip
 
 [
   drop 
-  {x:320 y:70 w:20 h:20} picked-color color set palette cb-box-ctx  
+  {x:320 y:70  w:20 h:20} picked-color color set palette cb-box-ctx  
   {x:320 y:50  w:20 h:20} picked-color 1 chroma-brighten color set palette cb-box-ctx  
   {x:320 y:30  w:20 h:20} picked-color 2 chroma-brighten color set palette cb-box-ctx  
   {x:320 y:10  w:20 h:20} picked-color 3 chroma-brighten color set palette cb-box-ctx  
-  {x:320 y:90 w:20 h:20} picked-color -1 chroma-brighten color set palette cb-box-ctx  
+  {x:320 y:90  w:20 h:20} picked-color -1 chroma-brighten color set palette cb-box-ctx  
   {x:320 y:110 w:20 h:20} picked-color -2 chroma-brighten color set palette cb-box-ctx  
   {x:320 y:130 w:20 h:20} picked-color -3 chroma-brighten color set palette cb-box-ctx  
 
@@ -53,17 +53,17 @@ uncons [drop] dip
   {x:280 y:70  w:20 h:20} picked-color -20 chroma-rotate color set palette cb-box-ctx  
   {x:260 y:70  w:20 h:20} picked-color -30 chroma-rotate color set palette cb-box-ctx  
   {x:240 y:70  w:20 h:20} picked-color -40 chroma-rotate color set palette cb-box-ctx  
-  {x:340 y:70 w:20 h:20} picked-color 10 chroma-rotate color set palette cb-box-ctx  
-  {x:360 y:70 w:20 h:20} picked-color 20 chroma-rotate color set palette cb-box-ctx  
-  {x:380 y:70 w:20 h:20} picked-color 30 chroma-rotate color set palette cb-box-ctx  
-  {x:400 y:70 w:20 h:20} picked-color 40 chroma-rotate color set palette cb-box-ctx  
+  {x:340 y:70  w:20 h:20} picked-color 10 chroma-rotate color set palette cb-box-ctx  
+  {x:360 y:70  w:20 h:20} picked-color 20 chroma-rotate color set palette cb-box-ctx  
+  {x:380 y:70  w:20 h:20} picked-color 30 chroma-rotate color set palette cb-box-ctx  
+  {x:400 y:70  w:20 h:20} picked-color 40 chroma-rotate color set palette cb-box-ctx  
 
-  {x:300 y:90  w:20 h:20} picked-color 1 chroma-saturate color set palette cb-box-ctx  
-  {x:280 y:110  w:20 h:20} picked-color 2 chroma-saturate color set palette cb-box-ctx  
-  {x:260 y:130  w:20 h:20} picked-color 3 chroma-saturate color set palette cb-box-ctx  
-  {x:340 y:50 w:20 h:20} picked-color -1 chroma-saturate color set palette cb-box-ctx  
-  {x:360 y:30 w:20 h:20} picked-color -2 chroma-saturate color set palette cb-box-ctx  
-  {x:380 y:10 w:20 h:20} picked-color -3 chroma-saturate color set palette cb-box-ctx  
+  {x:300 y:90  w:20 h:20} picked-color -1 chroma-saturate color set palette cb-box-ctx  
+  {x:280 y:110 w:20 h:20} picked-color -2 chroma-saturate color set palette cb-box-ctx  
+  {x:260 y:130 w:20 h:20} picked-color -3 chroma-saturate color set palette cb-box-ctx  
+  {x:340 y:50  w:20 h:20} picked-color 1 chroma-saturate color set palette cb-box-ctx  
+  {x:360 y:30  w:20 h:20} picked-color 2 chroma-saturate color set palette cb-box-ctx  
+  {x:380 y:10  w:20 h:20} picked-color 3 chroma-saturate color set palette cb-box-ctx  
 ] [blend-pallet] def
 
 # mix and paint
@@ -75,15 +75,9 @@ uncons [drop] dip
     {w:20 h:20} swap merge picked-color mix-percent a set color set palette cb-box-ctx
 ] [mix-block] def
 
-[ x get 200 > mixPaletteMode and
-    [mix-block]
-    [palette cb-color-at [] cons [picked-color] def blend-pallet]
-  ifte
-drop
-#  set-palette-mode log
+[palette cb-color-at [] cons [picked-color] def blend-pallet drop
 ] [mousedown] palette subscribe 
 
-##[ selected get [] cons [mix-percent] def drop ] [change] mixPercentSelect subscribe
 [ selected get [] cons [canvas-mix-percent] def drop ] [change] canvasMixPercentSelect subscribe
 
 # setup the painting area 
@@ -100,44 +94,23 @@ canvas2 cb-init cb-clear
   dup
   canvas paint-on-layer str-append cb-box-ctx
   [
-    layer-view-canvas cb-box-ctx
-  ] cons transform-array paint-on-layer get [drop] dip cb-transform
+    layer-view-canvas- paint-on-layer str-append cb-box-ctx
+  ] cons transform-array paint-on-layer get [drop] dip layer-view-canvas- paint-on-layer str-append cb-transform-ctx
 ] [print-block] def
 
 [false] [mouse-button-down] def
-[ print-block [true] [mouse-button-down] def] [mousedown] canvas2 subscribe 
-[ [false] [mouse-button-down] def] [mouseup] canvas2 subscribe 
-[ [false] [mouse-button-down] def] [mouseout] canvas2 subscribe 
-[ buttons get 1 == mouse-button-down or [print-block] [drop] ifte] [mousemove] canvas2 subscribe 
-
-[[true] [mixPaletteMode] def 
-##'text-decoration:underline;' str-dequote style mixBtn attr-publish
-##'text-decoration:none;' str-dequote style pickBtn attr-publish
-] [set-palette-mode] def
-
-[[false] [mixPaletteMode] def 
-##'text-decoration:underline;' str-dequote style pickBtn attr-publish
-##'text-decoration:none;' str-dequote style mixBtn attr-publish
-] [reset-palette-mode] def
-
-# set-palette-mode
-##[drop set-palette-mode] [mousedown] mixBtn subscribe
-##[drop reset-palette-mode] [mousedown] pickBtn subscribe
-
+[ print-block [true] [mouse-button-down] def drop] [mousedown] canvas2 subscribe 
+[ [false] [mouse-button-down] def drop] [mouseup] canvas2 subscribe 
+[ [false] [mouse-button-down] def drop] [mouseout] canvas2 subscribe 
+[ buttons get 1 == mouse-button-down or [print-block] [drop] ifte drop] [mousemove] canvas2 subscribe 
 
 [[true] [mixCanvasMode] def 
-##  'text-decoration:underline;' str-dequote style canvasMixBtn attr-publish
-##  'text-decoration:none;' str-dequote style canvasPickBtn attr-publish
 ] [set-canvas-mode] def
 
 [[false] [mixCanvasMode] def 
-##  'text-decoration:underline;' str-dequote style canvasPickBtn attr-publish
-##  'text-decoration:none;' str-dequote style canvasMixBtn attr-publish
 ] [reset-canvas-mode] def
 
 set-canvas-mode
-##[drop set-canvas-mode] [mousedown] canvasMixBtn subscribe
-##[drop reset-canvas-mode] [mousedown] canvasPickBtn subscribe
 
 [{0:{xsc:0.3 ysc:0.35 xsk:0 ysk:-0.02 xtr:40 ytr:30}
   1:{xsc:0.35 ysc:0.4 xsk:0 ysk:-0.03 xtr:130 ytr:50}
@@ -148,27 +121,29 @@ set-canvas-mode
 layer-view-canvas-bg cb-init cb-clear
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
-] transform-array 0 get [drop] dip cb-transform
+] transform-array 0 get [drop] dip layer-view-canvas-bg cb-transform-ctx
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
-] transform-array 1 get [drop] dip cb-transform
+] transform-array 1 get [drop] dip layer-view-canvas-bg cb-transform-ctx
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
-] transform-array 2 get [drop] dip cb-transform
+] transform-array 2 get [drop] dip layer-view-canvas-bg cb-transform-ctx
 #layer nav preview
-layer-view-canvas cb-init cb-clear
-[
-  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
-] transform-array 0 get [drop] dip cb-transform
-[
-  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
-] transform-array 1 get [drop] dip cb-transform
-[
-  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
-] transform-array 2 get [drop] dip cb-transform
+layer-view-canvas-0 cb-init cb-clear
+layer-view-canvas-1 cb-init cb-clear
+layer-view-canvas-2 cb-init cb-clear
+
+[[ {color:{r:0 g:0 b:63 a:0.25} x:0 y:580 w:480 h:30} layer-view-canvas- paint-on-layer str-append cb-box-ctx
+] transform-array paint-on-layer get [drop] dip layer-view-canvas- paint-on-layer str-append cb-transform-ctx
+] [indicate-layer] def
+
+[[ {color:{r:0 g:0 b:63 a:0.0} x:-3 y:577 w:486 h:36} layer-view-canvas- paint-on-layer str-append cb-box-ctx
+] transform-array paint-on-layer get [drop] dip layer-view-canvas- paint-on-layer str-append cb-transform-ctx
+] [de-indicate-layer] def
+indicate-layer
 
 # layer events
-[ x get 130 < 
+[ de-indicate-layer x get 130 < 
     [0]
     [x get 260 < 
       [1]
@@ -177,8 +152,9 @@ layer-view-canvas cb-init cb-clear
   ]
   ifte
   [] cons [paint-on-layer] def
- drop drop
-] [mousedown] layer-view-canvas subscribe
+  indicate-layer
+ drop log
+] [mousedown] layer-view-canvas-2 subscribe
 
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];

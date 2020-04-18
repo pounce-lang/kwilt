@@ -151,7 +151,8 @@ var pounce = (function () {
       }
     },
     'log': {definition: (s) => {
-      console.log(s);
+    const snapshot = JSON.stringify(s);
+      console.log(snapshot);
       return [s];
      } 
     },

@@ -94,7 +94,7 @@
       }
     },
     'cb-box-ctx': {
-      sig: { args: [{ 'canvasId': 'DomId' }, { 'x': 'number', 'y': 'number' }, { d: 'record' }] },
+      sig: { args: [{ 'x': 'number', 'y': 'number' }, { d: 'record' }, { 'canvasId': 'DomId' }] },
       desc: 'filled box',
       definition: function (s, pl, ws) {
         const canvasId = s.pop();
@@ -112,9 +112,9 @@
         return [s];
       }
     },
-    'cb-rect-ctx': {
-      sig: { args: [{ 'canvasId': 'DomId' }, { 'x': 'number', 'y': 'number' }, { d: 'record' }] },
-      desc: 'filled box',
+    'cb-box-alt-ctx': {
+      sig: { args: [{ 'x': 'number', 'y': 'number' }, { d: 'record' }, { 'canvasId': 'DomId' }] },
+      desc: 'filled box using get/putImageData instead of clear/fillRect',
       definition: function (s, pl, ws) {
         const canvasId = s.pop();
         const d = s.pop();
@@ -188,27 +188,29 @@
     // canvas_basic_module import
     // canvas cb-init cb-clear
     // [
-    //   {xsc:1 ysc:1 xsk:0 ysk:-0.5 xtr:-30 ytr:10} cb-transform
+    //   {xsc:1 ysc:1 xsk:0 ysk:-0.5 xtr:-30 ytr:10} canvas cb-transform-ctx
     //   {color:{r:127 g:127 b:127 a:0.5} x:50  y:50  w:100 h:70} cb-box
     //   {color:{r:127 g:127 b:127 a:0.5} x:100 y:100 w:100 h:70} cb-box
     //   {color:{r:127 g:127 b:127 a:0.5} x:150 y:150 w:100 h:70} cb-box
-    //   cb-transform-restore
+    //   canvas cb-transform-restore-ctx
     // ] [draw-with-skew] def
     // draw-with-skew
-    'cb-transform-invoke': {
+    'cb-transform-invoke-ctx': {
       desc: 'transform it {xsc:1 ysc:1 xsk:0 ysk:0 xtr:0 ytr:0} (sc)ale (sk)ew (tr)anslate',
       definition: function (s, pl, ws) {
+        const canvasId = s.pop();
         const tf = s.pop();
-        const ctx = ws[0].ctx[ws[0].ctx_default];
+        const ctx = ws[0].ctx[canvasId];
         ctx.save();
         ctx.transform(tf.xsc, tf.ysk, tf.xsk, tf.ysc, tf.xtr, tf.ytr);
         return [s];
       }
     },
-    'cb-transform-restore': {
+    'cb-transform-restore-ctx': {
       desc: 'transform it {xsc:1 xsk:0 ysk:0 ysc:1 xtr:0 ytr:0} (sc)ale (sk)ew (tr)anslate',
       definition: function (s, pl, ws) {
-        const ctx = ws[0].ctx[ws[0].ctx_default];
+        const canvasId = s.pop();
+        const ctx = ws[0].ctx[canvasId];
         ctx.restore();
         return [s];
       }
@@ -222,15 +224,17 @@
     //   {color:{r:127 g:127 b:127 a:0.5} x:130 y:90 w:100 h:70} cb-box
     // ] {xsc:1 ysc:1 xsk:0 ysk:-0.2 xtr:0 ytr:0} cb-transform
 
-    'cb-transform': {
-      expects: [{ desc: 'phrase', ofType: 'list' }, { desc: 'a scale skew translate record', ofType: 'record' }], effects: [-2], tests: [], desc: 'apply a transform on a phrase',
+    'cb-transform-ctx': {
+      expects: [{ desc: 'phrase', ofType: 'list' }, { desc: 'a scale skew translate record', ofType: 'record' }, { 'canvasId': 'DomId' }], effects: [-2], tests: [], desc: 'apply a transform on a phrase',
       definition: function (s, pl, ws) {
+        const canvasId = s.pop();
         const tf = s.pop();
         const block = s.pop();
-        const ctx = ws[0].ctx[ws[0].ctx_default];
+        const ctx = ws[0].ctx[canvasId];
+//        const ctx = ws[0].ctx[ws[0].ctx_default];
         ctx.save();
         ctx.transform(tf.xsc, tf.ysk, tf.xsk, tf.ysc, tf.xtr, tf.ytr);
-        pl = ['cb-transform-restore'].concat(pl);
+        pl = [canvasId, 'cb-transform-restore-ctx'].concat(pl);
         if (pounce.isArray(block)) {
           pl = block.concat(pl);
         }
