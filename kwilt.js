@@ -80,7 +80,6 @@ uncons [drop] dip
     [palette cb-color-at [] cons [picked-color] def blend-pallet]
   ifte
 drop
-#  set-palette-mode log
 ] [mousedown] palette subscribe 
 
 ##[ selected get [] cons [mix-percent] def drop ] [change] mixPercentSelect subscribe
@@ -100,15 +99,15 @@ canvas2 cb-init cb-clear
   dup
   canvas paint-on-layer str-append cb-box-ctx
   [
-    layer-view-canvas cb-box-ctx
-  ] cons transform-array paint-on-layer get [drop] dip cb-transform
+    layer-view-canvas- paint-on-layer str-append cb-box-ctx
+  ] cons transform-array paint-on-layer get [drop] dip layer-view-canvas- paint-on-layer str-append cb-transform-ctx
 ] [print-block] def
 
 [false] [mouse-button-down] def
-[ print-block [true] [mouse-button-down] def] [mousedown] canvas2 subscribe 
-[ [false] [mouse-button-down] def] [mouseup] canvas2 subscribe 
-[ [false] [mouse-button-down] def] [mouseout] canvas2 subscribe 
-[ buttons get 1 == mouse-button-down or [print-block] [drop] ifte] [mousemove] canvas2 subscribe 
+[ print-block [true] [mouse-button-down] def drop] [mousedown] canvas2 subscribe 
+[ [false] [mouse-button-down] def drop] [mouseup] canvas2 subscribe 
+[ [false] [mouse-button-down] def drop] [mouseout] canvas2 subscribe 
+[ buttons get 1 == mouse-button-down or [print-block] [drop] ifte drop] [mousemove] canvas2 subscribe 
 
 [[true] [mixPaletteMode] def 
 ##'text-decoration:underline;' str-dequote style mixBtn attr-publish
@@ -148,24 +147,26 @@ set-canvas-mode
 layer-view-canvas-bg cb-init cb-clear
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
-] transform-array 0 get [drop] dip cb-transform
+] transform-array 0 get [drop] dip layer-view-canvas-bg cb-transform-ctx
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
-] transform-array 1 get [drop] dip cb-transform
+] transform-array 1 get [drop] dip layer-view-canvas-bg cb-transform-ctx
 [
   {color:{r:255 g:255 b:255 a:0.5} x:0 y:0 w:480 h:560} cb-box
-] transform-array 2 get [drop] dip cb-transform
+] transform-array 2 get [drop] dip layer-view-canvas-bg cb-transform-ctx
 #layer nav preview
-layer-view-canvas cb-init cb-clear
-[
-  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
-] transform-array 0 get [drop] dip cb-transform
-[
-  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
-] transform-array 1 get [drop] dip cb-transform
-[
-  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
-] transform-array 2 get [drop] dip cb-transform
+layer-view-canvas-0 cb-init cb-clear
+##[
+##  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
+##] transform-array 0 get [drop] dip cb-transform
+layer-view-canvas-1 cb-init cb-clear
+##[
+##  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
+##] transform-array 1 get [drop] dip cb-transform
+layer-view-canvas-2 cb-init cb-clear
+##[
+##  {color:{r:255 g:255 b:255 a:0.0} x:0 y:0 w:480 h:560} cb-box
+##] transform-array 2 get [drop] dip cb-transform
 
 # layer events
 [ x get 130 < 
@@ -178,7 +179,7 @@ layer-view-canvas cb-init cb-clear
   ifte
   [] cons [paint-on-layer] def
  drop drop
-] [mousedown] layer-view-canvas subscribe
+] [mousedown] layer-view-canvas-2 subscribe
 
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
