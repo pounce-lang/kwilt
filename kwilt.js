@@ -67,8 +67,12 @@ uncons [drop] dip
 ] [blend-pallet] def
 
 
-[205 - 480 205 - / 10 * 1 round 0 math-max 10 /] [to-alpha] def
-[  480 205 - * 205 + 12 -] [from-alpha] def
+[205] [left] def 
+[480] [right] def
+[11] [ticks] def
+[right left -] [width] def
+[width ticks / 2 / - left - width / ticks * 1 round 0 math-max ticks /] [to-alpha] def
+[width * left + ] [from-alpha] def 
 
 alpha-bg cb-init cb-clear
 alpha cb-init cb-clear
@@ -81,7 +85,7 @@ alpha cb-init cb-clear
 ] map drop] [blend-alpha] def
 
 [ {x:205 y:26 w:275 h:3 color:{r:127 g:127 b:127 a:1}} alpha cb-box-ctx
-  {x:0 y:26 w:25 h:3 color:{r:250 g:10 b:10 a:1}} canvas-mix-percent from-alpha x set 
+  {x:0 y:26 w:24 h:3 color:{r:250 g:10 b:10 a:1}} canvas-mix-percent from-alpha x set 
    alpha cb-box-ctx
 ] [indicate-current-alpha] def
 
@@ -95,7 +99,7 @@ blend-alpha
 
 ##[ selected get [] cons [canvas-mix-percent] def drop ] [change] canvasMixPercentSelect subscribe
 [dup2 > [drop] [swap drop] ifte] [math-max] def
-[ x get to-alpha [] cons [canvas-mix-percent] def drop indicate-current-alpha ] 
+[ x get to-alpha log [] cons [canvas-mix-percent] def drop indicate-current-alpha ] 
 [pointerdown] alpha subscribe
 
 # setup the painting area 
@@ -105,7 +109,7 @@ canvas2 cb-init cb-clear
 [0] [paint-on-layer] def
 {x:0 y:0 w:1200 h:1200 color:{r:255 g:255 b:255 a:1}} canvas0 cb-box-ctx
 
-[1] [canvas-mix-percent] def
+[0.9] [canvas-mix-percent] def
 
 [ x get 10 - 20 / 1 round 20 * x set y get 10 - 20 / 1 round 20 * y set 
   {w:20 h:20} swap merge picked-color canvas-mix-percent a set color set 
@@ -186,3 +190,29 @@ const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_
 
 // var dataURL = canvas0.toDataURL();
 // console.log(dataURL);
+
+
+
+// canvas_basic_module import
+// canvas cb-init cb-clear
+// list_module import
+// rec_module import
+
+// [18] [left] def 
+// [110] [right] def
+// [10] [ticks] def
+// [right left -] [width] def
+// [dup2 > [drop] [swap drop] ifte] [math-max] def
+
+// [width ticks / 2 / - left - width / ticks * 1 round 0 math-max ticks /] [to-alpha] def
+// [width * left + ] [from-alpha] def   
+// {x:0 y:0 w:0 h:30 color:{r:0 g:0 b:0 a:0.2}} left w set cb-box
+// {x:0 y:0 w:0 h:30 color:{r:0 g:0 b:0 a:0.2}} left right + w set cb-box
+// [10 19 20 29 30 39 40 49 50 59 60 69 70 79 80 89 90 99 100 109 110 119] 
+// [8 +] map
+// [dup
+// {x:0 y:0 w:1 h:30 color:{r:0 g:0 b:0 a:0.9}} swap x set cb-box
+// to-alpha 
+// # width ticks / 2 / - left - width / ticks * 1 round 0 math-max ticks /
+// ] map
+// #[from-alpha] map
