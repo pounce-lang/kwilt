@@ -10,6 +10,7 @@
     const key = event.type + event.target.id;
     const [_, resultstack] = pounce.run([evt, ...lookup[key][0]], lookup[key][1], lookup[key][2]);
     pounce.resumable.stack = [...pounce.resumable.stack, ...pounce.cloneItem(resultstack)];
+    event.preventDefault();
   }
 
   let lookup = {};

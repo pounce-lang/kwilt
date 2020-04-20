@@ -66,19 +66,37 @@ uncons [drop] dip
   {x:380 y:10  w:20 h:20} picked-color 3 chroma-saturate color set palette cb-box-ctx  
 ] [blend-pallet] def
 
+
+[205 - 480 205 - / 10 * 1 round 0 math-max 10 /] [to-alpha] def
+[  480 205 - * 205 + 12 -] [from-alpha] def
+
+alpha-bg cb-init cb-clear
+alpha cb-init cb-clear
+{x:0 y:0 w:480 h:30 color:{r:127 g:127 b:127 a:1}} alpha-bg cb-box-ctx
+{x:205 y:10 w:275 h:5 color:{r:0 g:0 b:0 a:1}} alpha-bg cb-box-ctx
+{x:205 y:15 w:275 h:5 color:{r:255 g:255 b:255 a:1}} alpha-bg cb-box-ctx
+[[0 1 2 3 4 5 6 7 8 9 10] [
+ dup 25 * 205 + {x:0 y:5 w:23 h:20} swap x set swap picked-color swap 10 / a set color set
+ alpha cb-box-ctx
+] map drop] [blend-alpha] def
+
+[ {x:205 y:26 w:275 h:3 color:{r:127 g:127 b:127 a:1}} alpha cb-box-ctx
+  {x:0 y:26 w:25 h:3 color:{r:250 g:10 b:10 a:1}} canvas-mix-percent from-alpha x set 
+   alpha cb-box-ctx
+] [indicate-current-alpha] def
+
+
 # mix and paint
 [{r:255 g:255 b:255}] [picked-color] def
+blend-alpha
 
-[0.25] [mix-percent] def
+[palette cb-color-at [] cons [picked-color] def blend-pallet blend-alpha drop
+] [pointerdown] palette subscribe 
 
-[ x get 10 - 20 / 1 round 20 * x set y get 10 - 20 / 1 round 20 * y set 
-    {w:20 h:20} swap merge picked-color mix-percent a set color set palette cb-box-ctx
-] [mix-block] def
-
-[palette cb-color-at [] cons [picked-color] def blend-pallet drop
-] [mousedown] palette subscribe 
-
-[ selected get [] cons [canvas-mix-percent] def drop ] [change] canvasMixPercentSelect subscribe
+##[ selected get [] cons [canvas-mix-percent] def drop ] [change] canvasMixPercentSelect subscribe
+[dup2 > [drop] [swap drop] ifte] [math-max] def
+[ x get to-alpha [] cons [canvas-mix-percent] def drop indicate-current-alpha ] 
+[pointerdown] alpha subscribe
 
 # setup the painting area 
 canvas0 cb-init cb-clear
@@ -99,10 +117,10 @@ canvas2 cb-init cb-clear
 ] [print-block] def
 
 [false] [mouse-button-down] def
-[ print-block [true] [mouse-button-down] def drop] [mousedown] canvas2 subscribe 
-[ [false] [mouse-button-down] def drop] [mouseup] canvas2 subscribe 
-[ [false] [mouse-button-down] def drop] [mouseout] canvas2 subscribe 
-[ buttons get 1 == mouse-button-down or [print-block] [drop] ifte drop] [mousemove] canvas2 subscribe 
+[ print-block [true] [mouse-button-down] def drop] [pointerdown] canvas2 subscribe 
+[ [false] [mouse-button-down] def drop] [pointerup] canvas2 subscribe 
+[ [false] [mouse-button-down] def drop] [pointerout] canvas2 subscribe 
+[ buttons get 1 == mouse-button-down or [print-block] [drop] ifte drop] [pointermove] canvas2 subscribe 
 
 [[true] [mixCanvasMode] def 
 ] [set-canvas-mode] def
@@ -141,6 +159,7 @@ layer-view-canvas-2 cb-init cb-clear
 ] transform-array paint-on-layer get [drop] dip layer-view-canvas- paint-on-layer str-append cb-transform-ctx
 ] [de-indicate-layer] def
 indicate-layer
+indicate-current-alpha
 
 # layer events
 [ de-indicate-layer x get 130 < 
@@ -153,9 +172,9 @@ indicate-layer
   ifte
   [] cons [paint-on-layer] def
   indicate-layer
- drop log
-] [mousedown] layer-view-canvas-2 subscribe
-
+ drop
+] [pointerdown] layer-view-canvas-2 subscribe
+#[] [contextmenu] canvas2 subscribe
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
 

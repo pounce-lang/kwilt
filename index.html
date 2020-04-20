@@ -53,9 +53,12 @@
       padding: 10px;
       min-width: 1000px;
     }
-
+    .work-area {
+      touch-action: none; /* swipe and scroll with touch - none */
+      user-select: none;
+    }
     .paint-canvas {
-      background-color: #808080;
+      background-color: #ffffff;
       margin: 5px 15px 0 10px;
       cursor: cell;
       position: relative;
@@ -66,6 +69,14 @@
     .palette-canvas {
       margin: 5px 15px 0 10px;
       cursor: pointer;
+    }
+
+    .alpha-canvas {
+      margin: 5px 15px 0 10px;
+      cursor: pointer;
+      position: relative;
+      height: 30px;
+      width: 480px;
     }
 
     .layer-canvas {
@@ -178,10 +189,10 @@
 <body>
   <div class="col-container main-page">
     <div class="title">
-      <h2>Kirsti's Kwilt</h2>
+      <h2>Kwilt - transparent colors in layers</h2>
     </div>
 
-    <div class="row-container">
+    <div class="row-container work-area">
 
       <div class="col-container">
         <div class="paint-canvas">
@@ -195,13 +206,13 @@
         <div class="row-container">
           <!-- <button id="canvasPickBtn" class="pick-button">pick colors</button>
           <button id="canvasMixBtn" class="mix-button">paint</button> -->
-          <select id="canvasMixPercentSelect" class="mix-select">
+          <!-- <select id="canvasMixPercentSelect" class="mix-select">
             <option selected="selected" value="1">100%</option>
             <option value="0.5">50%</option>
             <option value="0.25">25%</option>
             <option value="0.1">10%</option>
             <option value="0.0">0%</option>
-          </select>
+          </select> -->
         </div>
       </div>
 
@@ -209,8 +220,9 @@
         <div class="palette-canvas">
           <canvas width="480" height="160" style="width: 480px; height: 160px" id="palette"></canvas>
         </div>
-        <div class="row-container">
-          <!-- <canvas width="480" height="30" style="width: 480px; height: 30px" id="alpha"></canvas> -->
+        <div class="alpha-canvas">
+          <canvas width="480" height="30" style="position: absolute; top: 0; left: 0; width: 480px; height: 30px" id="alpha-bg"></canvas>
+          <canvas width="480" height="30" style="position: absolute; top: 0; left: 0; width: 480px; height: 30px" id="alpha"></canvas>
         </div>
         <div class="layer-canvas">
           <!-- layer-view-canvas-bg and layer-view-canvas -->
