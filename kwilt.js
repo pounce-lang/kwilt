@@ -71,8 +71,8 @@ uncons [drop] dip
 [480] [right] def
 [11] [ticks] def
 [right left -] [width] def
-[width ticks / 2 / - left - width / ticks * 1 round 0 math-max ticks /] [to-alpha] def
-[width * left + ] [from-alpha] def 
+[width ticks / 2 / - left - width / ticks * 1 round 0 math-max ticks 1 - /] [to-alpha] def
+[.904 * width * left + 1 +] [from-alpha] def 
 
 alpha-bg cb-init cb-clear
 alpha cb-init cb-clear
@@ -85,7 +85,7 @@ alpha cb-init cb-clear
 ] map drop] [blend-alpha] def
 
 [ {x:205 y:26 w:275 h:3 color:{r:127 g:127 b:127 a:1}} alpha cb-box-ctx
-  {x:0 y:26 w:24 h:3 color:{r:250 g:10 b:10 a:1}} canvas-mix-percent from-alpha x set 
+  {x:0 y:26 w:23 h:3 color:{r:250 g:10 b:10 a:1}} canvas-mix-percent from-alpha x set 
    alpha cb-box-ctx
 ] [indicate-current-alpha] def
 
