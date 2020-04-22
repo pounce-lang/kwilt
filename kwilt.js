@@ -91,7 +91,7 @@ alpha cb-init cb-clear
 
 
 # mix and paint
-[{r:255 g:255 b:255}] [picked-color] def
+[{r:255 g:0 b:255}] [picked-color] def
 blend-alpha
 
 [palette cb-color-at [] cons [picked-color] def blend-pallet blend-alpha drop
@@ -109,7 +109,7 @@ canvas2 cb-init cb-clear
 [0] [paint-on-layer] def
 {x:0 y:0 w:1200 h:1200 color:{r:255 g:255 b:255 a:1}} canvas0 cb-box-ctx
 
-[0.9] [canvas-mix-percent] def
+[1] [canvas-mix-percent] def
 
 [ x get 10 - 20 / 1 round 20 * x set y get 10 - 20 / 1 round 20 * y set 
   {w:20 h:20} swap merge picked-color canvas-mix-percent a set color set 
@@ -178,7 +178,9 @@ indicate-current-alpha
   indicate-layer
  drop
 ] [pointerdown] layer-view-canvas-2 subscribe
-#[] [contextmenu] canvas2 subscribe
+[] [contextmenu] layer-view-canvas-2 subscribe
+#[drop] [contextmenu] palette subscribe
+#[drop] [contextmenu] alpha subscribe
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
 
