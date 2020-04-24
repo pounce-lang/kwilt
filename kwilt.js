@@ -72,20 +72,26 @@ uncons [drop] dip
 [11] [ticks] def
 [right left -] [width] def
 [width ticks / 2 / - left - width / ticks * 1 round 0 math-max ticks 1 - /] [to-alpha] def
-[.904 * width * left + 1 +] [from-alpha] def 
+[.9085 * width * left + 0.5 +] [from-alpha] def 
 
 alpha-bg cb-init cb-clear
+205 6 alpha_bg_image.png cb-load-image
+205 60 + 6 alpha_bg_image.png cb-load-image
+205 60 2 * + 6 alpha_bg_image.png cb-load-image
+205 60 3 * + 6 alpha_bg_image.png cb-load-image
+205 60 4 * + 6 alpha_bg_image.png cb-load-image
+
 alpha cb-init cb-clear
 {x:0 y:0 w:480 h:30 color:{r:127 g:127 b:127 a:1}} alpha-bg cb-box-ctx
-{x:205 y:10 w:275 h:5 color:{r:0 g:0 b:0 a:1}} alpha-bg cb-box-ctx
-{x:205 y:15 w:275 h:5 color:{r:255 g:255 b:255 a:1}} alpha-bg cb-box-ctx
+{x:205 y:0 w:275 h:5 color:{r:127 g:127 b:127 a:1}} alpha-bg cb-box-ctx
+##{x:205 y:15 w:275 h:5 color:{r:255 g:255 b:255 a:1}} alpha-bg cb-box-ctx
 [[0 1 2 3 4 5 6 7 8 9 10] [
  dup 25 * 205 + {x:0 y:5 w:23 h:20} swap x set swap picked-color swap 10 / a set color set
  alpha cb-box-ctx
 ] map drop] [blend-alpha] def
 
-[ {x:205 y:26 w:275 h:3 color:{r:127 g:127 b:127 a:1}} alpha cb-box-ctx
-  {x:0 y:26 w:23 h:3 color:{r:250 g:10 b:10 a:1}} canvas-mix-percent from-alpha x set 
+[ {x:205 y:24 w:275 h:6 color:{r:127 g:127 b:127 a:1}} alpha cb-box-ctx
+  {x:0 y:26 w:22 h:3 color:{r:250 g:10 b:10 a:1}} canvas-mix-percent from-alpha x set 
    alpha cb-box-ctx
 ] [indicate-current-alpha] def
 

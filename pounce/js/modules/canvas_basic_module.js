@@ -145,7 +145,10 @@
     'cb-load-image': {
       desc: 'given a src load an image (async)',
       definition: function (s, pl, ws) {
+
         const src = s.pop();
+        const y = s.pop();
+        const x = s.pop();
         const ctx = ws[0].ctx[ws[0].ctx_default];
         if (!ctx.images) {
           ctx.images = [];
@@ -155,7 +158,7 @@
         image.src = src;
 
         function drawImageActualSize() {
-          ctx.drawImage(this, 0, 0);
+          ctx.drawImage(this, x, y);
           ctx.images.push(this);
         }
         return [s];
