@@ -50,9 +50,10 @@
       background-color: rgba(76, 76, 76, .3);
       margin-block-start: 2px;
       margin: 5px;
-      padding: 10px;
-      min-width: 1000px;
+      padding: 5px;
+      min-width: 2000px;
     }
+    h2 { padding: 2px; margin: 3px;}
     .work-area {
       touch-action: none; /* swipe and scroll with touch - none */
       user-select: none;
@@ -204,8 +205,9 @@
             style="position: absolute; top: 0; left: 0; width: 480px; height: 560px"></canvas>
         </div>
         <div class="row-container">
-          <!-- <button id="canvasPickBtn" class="pick-button">pick colors</button>
-          <button id="canvasMixBtn" class="mix-button">paint</button> -->
+          <button id="canvasShowLayer0" class="pick-button">hide layer 1</button>
+          <button id="canvasShowLayer1" class="pick-button">hide layer 2</button>
+          <button id="canvasShowLayer2" class="pick-button">hide layer 3</button>
           <!-- <select id="canvasMixPercentSelect" class="mix-select">
             <option selected="selected" value="1">100%</option>
             <option value="0.5">50%</option>

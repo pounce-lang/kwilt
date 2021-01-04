@@ -116,9 +116,9 @@ canvas2 cb-init cb-clear
 {x:0 y:0 w:1200 h:1200 color:{r:255 g:255 b:255 a:1}} canvas0 cb-box-ctx
 
 [1] [canvas-mix-percent] def
-
-[ x get 10 - 20 / 1 round 20 * x set y get 10 - 20 / 1 round 20 * y set 
-  {w:20 h:20} swap merge picked-color canvas-mix-percent a set color set 
+[40] [block-sz] def
+[ x get 10 - block-sz / 1 round block-sz * x set y get 10 - block-sz / 1 round block-sz * y set 
+  {} block-sz w set block-sz h set swap merge picked-color canvas-mix-percent a set color set 
   dup
   canvas paint-on-layer str-append cb-box-ctx
   [
